@@ -1,0 +1,385 @@
+﻿<Window x:Class="Aquarium.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="550" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <Grid
+            Name="GridAquarium" Background="DeepSkyBlue"
+            ShowGridLines="True">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+        </Grid>
+
+        <GridSplitter
+            Grid.Column="1"
+            Width="3"
+            ShowsPreview="False"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Stretch" />
+
+        <Border
+            Grid.Column="2"
+            Padding="5">
+            <Border
+                CornerRadius="15"
+                Background="NavajoWhite">
+                <ScrollViewer
+                    VerticalScrollBarVisibility="Hidden">
+                    <StackPanel
+                        Name="PanelSetting">
+                        <StackPanel
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Center"
+                            Margin="0 15 0 5">
+                            <TextBlock
+                                Text="Height: "
+                                FontWeight="SemiBold"
+                                VerticalAlignment="Center"
+                                Margin="0 0 5 0" />
+                            <TextBox
+                                Name="HeightTextBox"
+                                Text="12"
+                                VerticalContentAlignment="Center"
+                                Margin="0 0 15 0" />
+                            <TextBlock
+                                Text="Width: "
+                                FontWeight="SemiBold"
+                                VerticalAlignment="Center"
+                                Margin="0 0 5 0" />
+                            <TextBox
+                                Name="WidthTextBox"
+                                Text="14"
+                                VerticalContentAlignment="Center"
+                                Margin="0 0 5 0" />
+                        </StackPanel>
+
+                        <StackPanel
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Center"
+                            Margin="0 0 0 10">
+                            <TextBlock
+                                Text="ITERATION:"
+                                FontWeight="SemiBold"
+                                VerticalAlignment="Center"
+                                Margin="0 0 5 0" />
+                            <TextBlock
+                                Name="CurrentIterationTextBlock"
+                                FontWeight="SemiBold"
+                                Text="0"
+                                FontSize="14"/>
+                        </StackPanel>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+
+                            <Button
+                                Name="ChangeGrid"
+                                Content="Update grid"
+                                Margin="5 0 2.5 0"
+                                Height="30"
+                                BorderThickness="2.5"
+                                Background="SandyBrown"
+                                Click="OnGridUpdate">
+                                <Button.Resources>
+                                    <Style TargetType="Border">
+                                        <Setter Property="CornerRadius" Value="10" />
+                                    </Style>
+                                </Button.Resources>
+                            </Button>
+                            <Button
+                                Grid.Row="0" Grid.Column="1"
+                                Name="Button"
+                                Content="Update objects"
+                                Height="30"
+                                Margin="2.5 0 5 0"
+                                BorderThickness="2.5"
+                                Background="SandyBrown"
+                                Click="OnObjectsUpdate">
+                                <Button.Resources>
+                                    <Style TargetType="Border">
+                                        <Setter Property="CornerRadius" Value="10" />
+                                    </Style>
+                                </Button.Resources>
+                            </Button>
+
+
+                            <Button
+                                Grid.Row="1" Grid.Column="0"
+                                Name="StartButton"
+                                Content="Start"
+                                Margin="5 5 2.5 0"
+                                Height="30"
+                                BorderThickness="2.5"
+                                Background="SandyBrown"
+                                Click="OnStart">
+                                <Button.Resources>
+                                    <Style TargetType="Border">
+                                        <Setter Property="CornerRadius" Value="10" />
+                                    </Style>
+                                </Button.Resources>
+                            </Button>
+
+                            <Button
+                                Grid.Row="1" Grid.Column="1"
+                                Name="PauseButton"
+                                Content="Pause"
+                                Margin="2.5 5 5 0"
+                                Height="30"
+                                BorderThickness="2.5"
+                                Background="SandyBrown"
+                                Click="OnPause">
+                                <Button.Resources>
+                                    <Style TargetType="Border">
+                                        <Setter Property="CornerRadius" Value="10" />
+                                    </Style>
+                                </Button.Resources>
+                            </Button>
+
+
+                        </Grid>
+                        <Grid
+                            Margin="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+
+                            <TextBlock
+                                Text="Aquarium"
+                                FontWeight="Bold" />
+
+                            <TextBlock
+                                Grid.Row="1" Grid.Column="0"
+                                Text="Herbivorous fish:" />
+                            <TextBox
+                                Name="NumOfHerbFish"
+                                Grid.Row="1" Grid.Column="1"
+                                Text="5"
+                                TextAlignment="Right" />
+
+
+                            <TextBlock
+                                Grid.Row="2" Grid.Column="0"
+                                Text="Predator fish:" />
+                            <TextBox
+                                Name="NumOfPredFish"
+                                Grid.Row="2" Grid.Column="1"
+                                Text="5"
+                                TextAlignment="Right" />
+
+
+                            <TextBlock
+                                Grid.Row="3" Grid.Column="0"
+                                Text="Herbs:" />
+                            <TextBox
+                                Name="NumOfHerbs"
+                                Grid.Row="3" Grid.Column="1"
+                                Text="8"
+                                TextAlignment="Right" />
+
+
+                            <TextBlock
+                                Grid.Row="4" Grid.Column="0"
+                                Text="Stones:" />
+                            <TextBox
+                                Name="NumOfStones"
+                                Grid.Row="4" Grid.Column="1"
+                                Text="8"
+                                TextAlignment="Right" />
+
+                            <!--  -->
+                            <TextBlock
+                                Grid.Row="5" Grid.Column="0"
+                                Text="" />
+                            <!--  -->
+
+                            <TextBlock
+                                Grid.Row="6" Grid.Column="0"
+                                Text="Fish"
+                                FontWeight="Bold" />
+
+
+                            <TextBlock
+                                Grid.Row="7" Grid.Column="0"
+                                Text="Age begin mature:" />
+                            <TextBox
+                                Name="AgeBeginMature"
+                                Grid.Row="7" Grid.Column="1"
+                                Text="5"
+                                TextAlignment="Right" />
+
+
+                            <TextBlock
+                                Grid.Row="8" Grid.Column="0"
+                                Text="Age end mature:" />
+                            <TextBox
+                                Name="AgeEndMature"
+                                Grid.Row="8" Grid.Column="1"
+                                Text="15"
+                                TextAlignment="Right" />
+
+
+                            <TextBlock
+                                Grid.Row="9" Grid.Column="0"
+                                Text="Age max:" />
+                            <TextBox
+                                Name="AgeMax"
+                                Grid.Row="9" Grid.Column="1"
+                                Text="20"
+                                TextAlignment="Right" />
+
+
+                            <!--  -->
+                            <TextBlock
+                                Grid.Row="10" Grid.Column="0"
+                                Text="" />
+                            <!--  -->
+
+
+                            <TextBlock
+                                Grid.Row="11" Grid.Column="0"
+                                Text="Energy max:" />
+                            <TextBox
+                                Name="EnergyMax"
+                                Grid.Row="11" Grid.Column="1"
+                                Text="100,0"
+                                TextAlignment="Right" />
+
+
+                            <TextBlock
+                                Grid.Row="12" Grid.Column="0"
+                                Text="Energy hungry level:" />
+                            <TextBox
+                                Name="EnergyHundryLvl"
+                                Grid.Row="12" Grid.Column="1"
+                                Text="70,0"
+                                TextAlignment="Right" />
+
+
+                            <TextBlock
+                                Grid.Row="13" Grid.Column="0"
+                                Text="Energy decrease on iteration:"
+                                TextWrapping="Wrap" />
+                            <TextBox
+                                Name="EnergyDecreaseOnItr"
+                                Grid.Row="13" Grid.Column="1"
+                                Text="10,0"
+                                TextAlignment="Right"
+                                VerticalContentAlignment="Center" />
+
+
+                            <TextBlock
+                                Grid.Row="14" Grid.Column="0"
+                                Text="Pregnancy length:" />
+                            <TextBox
+                                Name="PregnancyLen"
+                                Grid.Row="14" Grid.Column="1"
+                                Text="5"
+                                TextAlignment="Right" />
+
+
+                            <!--  -->
+                            <TextBlock
+                                Grid.Row="15" Grid.Column="0"
+                                Text="" />
+                            <!--  -->
+
+
+                            <TextBlock
+                                Grid.Row="16" Grid.Column="0"
+                                Text="Herb"
+                                FontWeight="Bold" />
+
+
+                            <TextBlock
+                                Grid.Row="17" Grid.Column="0"
+                                Text="Growth max:" />
+                            <TextBox
+                                Name="GrowthMax"
+                                Grid.Row="17" Grid.Column="1"
+                                Text="100,0"
+                                TextAlignment="Right" />
+
+
+                            <TextBlock
+                                Grid.Row="18" Grid.Column="0"
+                                Text="Growth increase on iteration:"
+                                TextWrapping="Wrap" />
+                            <TextBox
+                                Name="GrowthIncreaseOnItr"
+                                Grid.Row="18" Grid.Column="1"
+                                Text="10,5"
+                                TextAlignment="Right"
+                                VerticalContentAlignment="Center" />
+                        </Grid>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+        </Border>
+    </Grid>
+</Window>
