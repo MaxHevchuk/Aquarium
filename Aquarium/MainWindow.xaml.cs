@@ -115,10 +115,9 @@ namespace Aquarium
                 var nearFood = fish.FindTheNearestObj(food);
                 var nearFoodCell = nearFood?.GetCell();
 
-                var anotherFishes = new List<T>(fishes).Where(f => fish.IsMale != f.IsMale)
-                    .Where(f => !fish.IsPregnant).ToList();
+                var anotherFishes = new List<T>(fishes).Where(f => fish.IsMale != f.IsMale).ToList();
                 anotherFishes.Remove(fish);
-                var nearFish = fish.FindTheNearestObj(anotherFishes.ToList());
+                var nearFish = fish.FindTheNearestObj(anotherFishes.Where(f => !f.IsPregnant).ToList());
                 var nearFishCell = nearFish?.GetCell();
 
                 if (nearFoodCell != null && fish.EnergyCurrent < fish.EnergyHungryLevel &&
@@ -174,29 +173,29 @@ namespace Aquarium
             where TE : ICell
         {
             var aquarium = AquariumContainer.GetInstance();
-            // foreach (var fish in listOfFish.Where(fish => fish.GetDeathType() != DeathType.Undefined).ToList())
-            // {
-            //     fish.GetCell().Clear();
-            //     aquarium.Remove(fish);
-            // }
-
-            listOfFish.Where(fish => fish.GetDeathType() != DeathType.Undefined).ToList().ForEach(fish =>
+            foreach (var fish in listOfFish.Where(fish => fish.GetDeathType() != DeathType.Undefined).ToList())
             {
                 fish.GetCell().Clear();
                 aquarium.Remove(fish);
-            });
+            }
 
-            // foreach (var food in listOfFood.Where(food => food.GetDeathType() != DeathType.Undefined).ToList())
+            // listOfFish.Where(fish => fish.GetDeathType() != DeathType.Undefined).ToList().ForEach(fish =>
             // {
-            //     food.GetCell().Clear();
-            //     aquarium.Remove(food);
-            // }
+            //     fish.GetCell().Clear();
+            //     aquarium.Remove(fish);
+            // });
 
-            listOfFood.Where(food => food.GetDeathType() != DeathType.Undefined).ToList().ForEach(food =>
+            foreach (var food in listOfFood.Where(food => food.GetDeathType() != DeathType.Undefined).ToList())
             {
                 food.GetCell().Clear();
                 aquarium.Remove(food);
-            });
+            }
+
+            // listOfFood.Where(food => food.GetDeathType() != DeathType.Undefined).ToList().ForEach(food =>
+            // {
+            //     food.GetCell().Clear();
+            //     aquarium.Remove(food);
+            // });
         }
 
         private void UpdateObjectsImages()
