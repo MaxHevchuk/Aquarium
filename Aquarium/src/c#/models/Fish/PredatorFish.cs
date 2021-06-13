@@ -4,9 +4,7 @@ namespace Aquarium.Fish
 {
     public class PredatorFish : FishAbstract
     {
-        public PredatorFish() : this(null)
-        {
-        }
+        public PredatorFish() : this(null) { }
 
         public PredatorFish(Cell cell)
         {

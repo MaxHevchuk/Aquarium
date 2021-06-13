@@ -191,7 +191,7 @@
                             <TextBox
                                 Name="NumOfHerbFish"
                                 Grid.Row="1" Grid.Column="1"
-                                Text="7"
+                                Text="8"
                                 TextAlignment="Right" />
 
 
@@ -252,7 +252,7 @@
                             <TextBox
                                 Name="AgeEndMature"
                                 Grid.Row="8" Grid.Column="1"
-                                Text="20"
+                                Text="30"
                                 TextAlignment="Right" />
 
 
@@ -262,7 +262,7 @@
                             <TextBox
                                 Name="AgeMax"
                                 Grid.Row="9" Grid.Column="1"
-                                Text="30"
+                                Text="40"
                                 TextAlignment="Right" />
 
 
@@ -287,7 +287,7 @@
                                 Grid.Row="12" Grid.Column="0"
                                 Text="Energy hungry level:" />
                             <TextBox
-                                Name="EnergyHundryLvl"
+                                Name="EnergyHungryLvl"
                                 Grid.Row="12" Grid.Column="1"
                                 Text="60,0"
                                 TextAlignment="Right" />
@@ -345,7 +345,7 @@
                             <TextBox
                                 Name="GrowthIncreaseOnItr"
                                 Grid.Row="18" Grid.Column="1"
-                                Text="10,5"
+                                Text="4,5"
                                 TextAlignment="Right"
                                 VerticalContentAlignment="Center" />
                         </Grid>

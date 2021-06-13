@@ -2,9 +2,7 @@
 {
     public class HerbivorousFish : FishAbstract
     {
-        public HerbivorousFish() : this(null)
-        {
-        }
+        public HerbivorousFish() : this(null) { }
 
         public HerbivorousFish(Cell cell)
         {

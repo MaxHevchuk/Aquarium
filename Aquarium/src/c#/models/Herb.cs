@@ -6,15 +6,12 @@ namespace Aquarium
     public class Herb : ICell
     {
         private readonly Cell _cell;
-
         private DeathType _deathType;
-
-
         public double GrowthCurrent { get; set; }
-
         public double GrowthIncreaseOnIteration { get; set; }
-
         public double GrowthMax { get; set; }
+        public Cell GetCell() => _cell;
+        public DeathType GetDeathType() => _deathType;
 
         public Herb(Cell cell)
         {
@@ -36,8 +33,5 @@ namespace Aquarium
             else
                 GrowthCurrent -= neededEnergy;
         }
-
-        public Cell GetCell() => _cell;
-        public DeathType GetDeathType() => _deathType;
     }
 }

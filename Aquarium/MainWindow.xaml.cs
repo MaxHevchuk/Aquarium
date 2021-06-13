@@ -55,7 +55,6 @@ namespace Aquarium
                 _timer = new DispatcherTimer {Interval = TimeSpan.FromSeconds(2)};
                 _timer.Tick += StartIteration;
             }
-
             _timer.Start();
         }
 
@@ -67,8 +66,7 @@ namespace Aquarium
             UpdateObjectsLife(AquariumContainer.GetInstance().HerbivorousFish, AquariumContainer.GetInstance().Herbs);
 
             PredatorFishNextIteration();
-            UpdateObjectsLife(AquariumContainer.GetInstance().PredatorFish,
-                AquariumContainer.GetInstance().HerbivorousFish);
+            UpdateObjectsLife(AquariumContainer.GetInstance().PredatorFish, AquariumContainer.GetInstance().HerbivorousFish);
 
             UpdateObjectsImages();
             UpdateObjectsPlaces();
@@ -125,7 +123,6 @@ namespace Aquarium
                 {
                     fish.MoveTo(
                         fish.FindNearAvailableCellOnWayTo(nearFoodCell, aquarium.Cells));
-                    // if fish is near to herb fish then this eat it
                 }
                 else if (nearFishCell != null && fish.EnergyCurrent >= fish.EnergyHungryLevel &
                     !fish.IsPregnant & fish.AgeBeginMature <= fish.AgeCurrent & fish.AgeCurrent < fish.AgeEndMature &
@@ -133,12 +130,10 @@ namespace Aquarium
                 {
                     fish.MoveTo(
                         fish.FindNearAvailableCellOnWayTo(nearFishCell, aquarium.Cells));
-                    // if fishes are near one to another then reproduct
                 }
                 else
                     fish.MoveTo(
                         fish.FindNearAvailableCellOnWayTo(GetRandomCell(aquarium.Cells), aquarium.Cells));
-
 
                 if (nearFood != null & nearFoodCell != null && fish.CountLengthTo(nearFoodCell, fish.GetCell()) == 1)
                     fish.Eat(nearFood);
@@ -150,7 +145,6 @@ namespace Aquarium
                 if (children == null) children = new List<T>();
                 children.Add(CreateChild<T>());
             }
-
             children?.ForEach(AquariumContainer.GetInstance().Add);
         }
 
@@ -179,23 +173,11 @@ namespace Aquarium
                 aquarium.Remove(fish);
             }
 
-            // listOfFish.Where(fish => fish.GetDeathType() != DeathType.Undefined).ToList().ForEach(fish =>
-            // {
-            //     fish.GetCell().Clear();
-            //     aquarium.Remove(fish);
-            // });
-
             foreach (var food in listOfFood.Where(food => food.GetDeathType() != DeathType.Undefined).ToList())
             {
                 food.GetCell().Clear();
                 aquarium.Remove(food);
             }
-
-            // listOfFood.Where(food => food.GetDeathType() != DeathType.Undefined).ToList().ForEach(food =>
-            // {
-            //     food.GetCell().Clear();
-            //     aquarium.Remove(food);
-            // });
         }
 
         private void UpdateObjectsImages()
@@ -206,28 +188,9 @@ namespace Aquarium
                 _objImages = new List<Image>(_numOfHerbs + _numOfStones + _numOfHerbFish + _numOfPredFish);
 
             aquarium.Herbs.ForEach(herb => _objImages.Add(UpdateHerbImage(herb)));
-            // foreach (var herb in aquarium.Herbs)
-            // {
-            //     _objImages.Add(UpdateHerbImage(herb));
-            // }
-
             aquarium.HerbivorousFish.ForEach(fish => _objImages.Add(UpdateFishImage(fish, "herbivorous")));
-            // foreach (var fish in aquarium.HerbivorousFish)
-            // {
-            //     _objImages.Add(UpdateFishImage(fish, "herbivorous"));
-            // }
-
             aquarium.PredatorFish.ForEach(fish => _objImages.Add(UpdateFishImage(fish, "predator")));
-            // foreach (var fish in aquarium.PredatorFish)
-            // {
-            //     _objImages.Add(UpdateFishImage(fish, "predator"));
-            // }
-
             aquarium.Stones.ForEach(stone => _objImages.Add(UpdateStoneImage(stone)));
-            // foreach (var stone in aquarium.Stones)
-            // {
-            //     _objImages.Add(UpdateStoneImage(stone));
-            // }
         }
 
         private static Image UpdateStoneImage(Stone stone)
@@ -268,10 +231,6 @@ namespace Aquarium
         {
             AquariumGrid.Children.Clear();
             _objImages.ForEach(image => AquariumGrid.Children.Add(image));
-            // foreach (var image in _objImages)
-            // {
-            //     AquariumGrid.Children.Add(image);
-            // }
         }
 
 
@@ -313,7 +272,7 @@ namespace Aquarium
                 int.TryParse(AgeMax.Text, out _ageMax)
                 &&
                 double.TryParse(EnergyMax.Text, out _energyMax) &&
-                double.TryParse(EnergyHundryLvl.Text, out _energyHungryLevel) &&
+                double.TryParse(EnergyHungryLvl.Text, out _energyHungryLevel) &&
                 double.TryParse(EnergyDecreaseOnItr.Text, out _energyDecreaseOnItr)
                 &&
                 int.TryParse(PregnancyLen.Text, out _pregnancyLength) &&

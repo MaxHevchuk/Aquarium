@@ -34,6 +34,8 @@ namespace Aquarium.Fish
         public DeathType DeathType { get; set; }
 
         public Cell Cell { get; set; }
+        public Cell GetCell() => Cell;
+        public DeathType GetDeathType() => DeathType;
 
         public abstract void Eat<T>(T obj);
 
@@ -159,12 +161,7 @@ namespace Aquarium.Fish
                 var nearCell = nearCells[0];
                 var len = int.MaxValue;
                 var i = 0;
-                
-                // nearCells.Where(cell => (i = CountLengthTo(toCell, cell)) < len).ToList().ForEach(cell =>
-                // {
-                //     len = i;
-                //     nearCell = cell;
-                // });
+
                 foreach (var cell in nearCells.Where(cell => (i = CountLengthTo(toCell, cell)) < len))
                 {
                     len = i;
@@ -182,20 +179,11 @@ namespace Aquarium.Fish
         {
             T nearObj = default;
             var minimum = int.MaxValue;
-            // objects.ForEach(obj =>
-            // {
-            //     var d = CountLengthTo(obj.GetCell(), Cell);
-            //     if (d >= minimum) return;
-            //     minimum = d;
-            //     nearObj = obj;
-            // });
             foreach (var obj in objects)
             {
                 var cell = obj.GetCell();
                 var d = CountLengthTo(cell, Cell);
-            
                 if (d >= minimum) continue;
-            
                 minimum = d;
                 nearObj = obj;
             }
@@ -234,8 +222,5 @@ namespace Aquarium.Fish
             IsPregnant = false;
             PregnancyCurrent = 0;
         }
-
-        public Cell GetCell() => Cell;
-        public DeathType GetDeathType() => DeathType;
     }
 }
