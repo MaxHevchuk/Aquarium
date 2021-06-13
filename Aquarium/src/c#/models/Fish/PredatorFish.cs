@@ -1,15 +1,17 @@
-﻿using System;
-using Aquarium.enums;
+﻿using Aquarium.enums;
 
 namespace Aquarium.Fish
 {
     public class PredatorFish : FishAbstract
     {
+        public PredatorFish() : this(null)
+        {
+        }
+
         public PredatorFish(Cell cell)
         {
-            _cell = cell;
-            _cell.OccupiedBy(this);
-            _energyCurrent = new Random().Next(50, 101);
+            Cell = cell;
+            Cell.OccupiedBy(this);
         }
 
         public override void Eat<T>(T obj)
@@ -18,7 +20,7 @@ namespace Aquarium.Fish
                 && typeof(T) != typeof(HerbivorousFish)) return;
 
             if (!(obj is HerbivorousFish fish)) return;
-            
+
             IncreaseEnergyByEating(fish.EnergyCurrent);
             fish.DeathType = DeathType.ByPredator;
         }

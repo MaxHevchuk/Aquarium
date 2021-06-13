@@ -2,14 +2,12 @@
 {
     public class Stone
     {
-        private Cell _cell;
-
-        public Cell Cell => _cell;
+        public Cell Cell { get; }
 
         public Stone(Cell cell)
         {
-            _cell = cell;
-            _cell.OccupiedBy(this);
+            Cell = cell;
+            Cell.OccupiedBy(this);
         }
     }
 }

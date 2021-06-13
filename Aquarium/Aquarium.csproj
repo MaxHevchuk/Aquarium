@@ -51,7 +51,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="src\c#\Controller.cs" />
     <Compile Include="src\c#\enums\DeathType.cs" />
     <Compile Include="src\c#\interfaces\ICell.cs" />
     <Compile Include="src\c#\models\AquariumContainer.cs" />
@@ -134,16 +133,16 @@
     <Resource Include="src\res\icons\stone\stone.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\res\icons\fish\herbivorous\adult\girl_pregnant.png" />
+    <Resource Include="src\res\icons\fish\herbivorous\adult\girl_pregnant.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\res\icons\fish\herbivorous\old\girl_pregnant.png" />
+    <Resource Include="src\res\icons\fish\herbivorous\old\girl_pregnant.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\res\icons\fish\predator\adult\girl_pregnant.png" />
+    <Resource Include="src\res\icons\fish\predator\adult\girl_pregnant.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\res\icons\fish\predator\old\girl_pregnant.png" />
+    <Resource Include="src\res\icons\fish\predator\old\girl_pregnant.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

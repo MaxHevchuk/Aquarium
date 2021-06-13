@@ -4,7 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="MainWindow" Height="550" Width="800">
+        WindowState="Maximized"
+        Title="Aquarium" Height="550" Width="800">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*" />
@@ -13,39 +14,8 @@
         </Grid.ColumnDefinitions>
 
         <Grid
-            Name="GridAquarium" Background="DeepSkyBlue"
-            ShowGridLines="True">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-            </Grid.RowDefinitions>
-        </Grid>
+            Name="AquariumGrid" Background="DeepSkyBlue"
+            ShowGridLines="True" />
 
         <GridSplitter
             Grid.Column="1"
@@ -75,7 +45,7 @@
                                 Margin="0 0 5 0" />
                             <TextBox
                                 Name="HeightTextBox"
-                                Text="12"
+                                Text="20"
                                 VerticalContentAlignment="Center"
                                 Margin="0 0 15 0" />
                             <TextBlock
@@ -85,7 +55,7 @@
                                 Margin="0 0 5 0" />
                             <TextBox
                                 Name="WidthTextBox"
-                                Text="14"
+                                Text="20"
                                 VerticalContentAlignment="Center"
                                 Margin="0 0 5 0" />
                         </StackPanel>
@@ -103,7 +73,7 @@
                                 Name="CurrentIterationTextBlock"
                                 FontWeight="SemiBold"
                                 Text="0"
-                                FontSize="14"/>
+                                FontSize="14" />
                         </StackPanel>
 
                         <Grid>
@@ -151,10 +121,11 @@
                                 Grid.Row="1" Grid.Column="0"
                                 Name="StartButton"
                                 Content="Start"
+                                Foreground="White"
                                 Margin="5 5 2.5 0"
                                 Height="30"
                                 BorderThickness="2.5"
-                                Background="SandyBrown"
+                                Background="ForestGreen"
                                 Click="OnStart">
                                 <Button.Resources>
                                     <Style TargetType="Border">
@@ -167,10 +138,11 @@
                                 Grid.Row="1" Grid.Column="1"
                                 Name="PauseButton"
                                 Content="Pause"
+                                Foreground="White"
                                 Margin="2.5 5 5 0"
                                 Height="30"
                                 BorderThickness="2.5"
-                                Background="SandyBrown"
+                                Background="OrangeRed"
                                 Click="OnPause">
                                 <Button.Resources>
                                     <Style TargetType="Border">
@@ -219,7 +191,7 @@
                             <TextBox
                                 Name="NumOfHerbFish"
                                 Grid.Row="1" Grid.Column="1"
-                                Text="5"
+                                Text="7"
                                 TextAlignment="Right" />
 
 
@@ -229,7 +201,7 @@
                             <TextBox
                                 Name="NumOfPredFish"
                                 Grid.Row="2" Grid.Column="1"
-                                Text="5"
+                                Text="3"
                                 TextAlignment="Right" />
 
 
@@ -239,7 +211,7 @@
                             <TextBox
                                 Name="NumOfHerbs"
                                 Grid.Row="3" Grid.Column="1"
-                                Text="8"
+                                Text="10"
                                 TextAlignment="Right" />
 
 
@@ -249,7 +221,7 @@
                             <TextBox
                                 Name="NumOfStones"
                                 Grid.Row="4" Grid.Column="1"
-                                Text="8"
+                                Text="10"
                                 TextAlignment="Right" />
 
                             <!--  -->
@@ -280,7 +252,7 @@
                             <TextBox
                                 Name="AgeEndMature"
                                 Grid.Row="8" Grid.Column="1"
-                                Text="15"
+                                Text="20"
                                 TextAlignment="Right" />
 
 
@@ -290,7 +262,7 @@
                             <TextBox
                                 Name="AgeMax"
                                 Grid.Row="9" Grid.Column="1"
-                                Text="20"
+                                Text="30"
                                 TextAlignment="Right" />
 
 
@@ -317,7 +289,7 @@
                             <TextBox
                                 Name="EnergyHundryLvl"
                                 Grid.Row="12" Grid.Column="1"
-                                Text="70,0"
+                                Text="60,0"
                                 TextAlignment="Right" />
 
 
@@ -328,7 +300,7 @@
                             <TextBox
                                 Name="EnergyDecreaseOnItr"
                                 Grid.Row="13" Grid.Column="1"
-                                Text="10,0"
+                                Text="2,5"
                                 TextAlignment="Right"
                                 VerticalContentAlignment="Center" />
 

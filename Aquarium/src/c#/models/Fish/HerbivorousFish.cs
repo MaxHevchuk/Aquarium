@@ -1,14 +1,15 @@
-﻿using System;
-
-namespace Aquarium.Fish
+﻿namespace Aquarium.Fish
 {
     public class HerbivorousFish : FishAbstract
     {
+        public HerbivorousFish() : this(null)
+        {
+        }
+
         public HerbivorousFish(Cell cell)
         {
-            _cell = cell;
-            _cell.OccupiedBy(this);
-            _energyCurrent = new Random().Next(50, 101);
+            Cell = cell;
+            Cell.OccupiedBy(this);
         }
 
         public override void Eat<T>(T obj)

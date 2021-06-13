@@ -17,14 +17,8 @@ namespace Aquarium
         private static int _currentItr;
         private static DispatcherTimer _timer;
 
-        private List<Image> _images;
-
-
-        // private Controller _aquarium;
+        private List<Image> _objImages;
         private static readonly Random Random = new Random();
-
-        private readonly Grid _aquariumGrid;
-
 
         // <!-- INPUT NUMBERS OF -->
         private static int _numOfHerbFish;
@@ -51,20 +45,14 @@ namespace Aquarium
         public MainWindow()
         {
             InitializeComponent();
-            _aquariumGrid = GridAquarium;
+            OnGridUpdate(null, null);
         }
 
         private void OnStart(object sender, RoutedEventArgs e)
         {
-            // Application.Current.Dispatcher.Invoke((Action) delegate { _aquarium.Start(); });
-            // StartIteration(null, null);
-            // var timerCallback = new TimerCallback(StartIteration);
-            // if (_timer == null) _timer = new Timer(timerCallback, new object(), 0, 5000);
-            // else _timer.Change(0, 10000);
-
             if (_timer == null)
             {
-                _timer = new DispatcherTimer {Interval = TimeSpan.FromSeconds(1)};
+                _timer = new DispatcherTimer {Interval = TimeSpan.FromSeconds(2)};
                 _timer.Tick += StartIteration;
             }
 
@@ -75,48 +63,47 @@ namespace Aquarium
         {
             HerbNextIteration();
 
-            HerbivorousNextIteration();
+            HerbivorousFishNextIteration();
             UpdateObjectsLife(AquariumContainer.GetInstance().HerbivorousFish, AquariumContainer.GetInstance().Herbs);
 
-            PredatorNextIteration();
+            PredatorFishNextIteration();
             UpdateObjectsLife(AquariumContainer.GetInstance().PredatorFish,
                 AquariumContainer.GetInstance().HerbivorousFish);
 
             UpdateObjectsImages();
             UpdateObjectsPlaces();
-            
+
             CurrentIterationTextBlock.Text = (++_currentItr).ToString();
         }
 
         private void OnPause(object sender, RoutedEventArgs e)
         {
-            // _timer.Change(Timeout.Infinite, Timeout.Infinite);
             _timer.Stop();
         }
 
         private static void HerbNextIteration()
         {
-            foreach (var herb in AquariumContainer.GetInstance().Herbs)
-            {
-                herb.Grow();
-            }
+            AquariumContainer.GetInstance().Herbs.ForEach(fish => fish.Grow());
         }
 
-        private static void HerbivorousNextIteration()
+        private static void HerbivorousFishNextIteration()
         {
-            FishNextIteration(AquariumContainer.GetInstance().HerbivorousFish, AquariumContainer.GetInstance().Herbs);
+            FishNextIteration(AquariumContainer.GetInstance().HerbivorousFish,
+                AquariumContainer.GetInstance().Herbs);
         }
 
-        private static void PredatorNextIteration()
+        private static void PredatorFishNextIteration()
         {
             FishNextIteration(AquariumContainer.GetInstance().PredatorFish,
                 AquariumContainer.GetInstance().HerbivorousFish);
         }
 
-        private static void FishNextIteration<T, TK>(List<T> fishes, List<TK> food)
-            where T : FishAbstract
-            where TK : ICell
+        private static void FishNextIteration<T, TE>(List<T> fishes, List<TE> food)
+            where T : FishAbstract, new()
+            where TE : ICell
         {
+            var aquarium = AquariumContainer.GetInstance();
+            List<T> children = null;
             foreach (var fish in fishes)
             {
                 fish.IncreaseAgeCurrent();
@@ -126,75 +113,122 @@ namespace Aquarium
                 if (fish.GetDeathType() != DeathType.Undefined) return;
 
                 var nearFood = fish.FindTheNearestObj(food);
-                var nearFoodCell = nearFood.GetCell();
+                var nearFoodCell = nearFood?.GetCell();
 
-                var nearFish = fish.FindTheNearestObj(fishes);
-                var nearFishCell = nearFish.GetCell();
+                var anotherFishes = new List<T>(fishes).Where(f => fish.IsMale != f.IsMale)
+                    .Where(f => !fish.IsPregnant).ToList();
+                anotherFishes.Remove(fish);
+                var nearFish = fish.FindTheNearestObj(anotherFishes.ToList());
+                var nearFishCell = nearFish?.GetCell();
 
-                if (fish.CheckIfEnoughEnergy(nearFoodCell))
+                if (nearFoodCell != null && fish.EnergyCurrent < fish.EnergyHungryLevel &&
+                    fish.CountLengthTo(nearFoodCell, fish.GetCell()) > 1)
                 {
                     fish.MoveTo(
-                        fish.FindNearAvailableCellOnWayTo(nearFoodCell, AquariumContainer.GetInstance().Cells));
-                    if (fish.CountLengthTo(nearFoodCell, fish.GetCell()) == 1)
-                        fish.Eat(nearFood);
+                        fish.FindNearAvailableCellOnWayTo(nearFoodCell, aquarium.Cells));
                     // if fish is near to herb fish then this eat it
                 }
-                else if (fish.CheckIfEnoughEnergy(nearFishCell))
+                else if (nearFishCell != null && fish.EnergyCurrent >= fish.EnergyHungryLevel &
+                    !fish.IsPregnant & fish.AgeBeginMature <= fish.AgeCurrent & fish.AgeCurrent < fish.AgeEndMature &
+                    fish.CountLengthTo(nearFishCell, fish.GetCell()) > 1)
                 {
                     fish.MoveTo(
-                        fish.FindNearAvailableCellOnWayTo(nearFishCell, AquariumContainer.GetInstance().Cells));
-                    if (fish.CountLengthTo(nearFishCell, fish.GetCell()) == 1)
-                        fish.Reproduction(nearFish);
+                        fish.FindNearAvailableCellOnWayTo(nearFishCell, aquarium.Cells));
                     // if fishes are near one to another then reproduct
                 }
+                else
+                    fish.MoveTo(
+                        fish.FindNearAvailableCellOnWayTo(GetRandomCell(aquarium.Cells), aquarium.Cells));
+
+
+                if (nearFood != null & nearFoodCell != null && fish.CountLengthTo(nearFoodCell, fish.GetCell()) == 1)
+                    fish.Eat(nearFood);
+                if (nearFish != null & nearFishCell != null && fish.PregnancyCurrent < 1 &&
+                    nearFish.PregnancyCurrent < 1 && fish.CountLengthTo(nearFishCell, fish.GetCell()) == 1)
+                    fish.Reproduction(nearFish);
+                if (!fish.IsPregnant || fish.PregnancyCurrent < fish.PregnancyLength) continue;
+
+                if (children == null) children = new List<T>();
+                children.Add(CreateChild<T>());
             }
+
+            children?.ForEach(AquariumContainer.GetInstance().Add);
         }
 
-        private static void UpdateObjectsLife<T, TK>(List<T> listOfFish, List<TK> listOfFood)
-            where T : FishAbstract
-            where TK : ICell
+        private static T CreateChild<T>() where T : FishAbstract
         {
-            if (listOfFish == null || listOfFood == null) return;
+            Cell cell;
+            do
+            {
+                cell = GetRandomCell(AquariumContainer.GetInstance().Cells);
+            } while (!cell.IsAvailable());
 
-            foreach (var fish in listOfFish.Where(fish => fish.GetDeathType() != DeathType.Undefined).ToList())
+            var child = (T) Activator.CreateInstance(typeof(T), cell);
+            GenerateFish(child);
+
+            return child;
+        }
+
+        private static void UpdateObjectsLife<T, TE>(List<T> listOfFish, List<TE> listOfFood)
+            where T : FishAbstract
+            where TE : ICell
+        {
+            var aquarium = AquariumContainer.GetInstance();
+            // foreach (var fish in listOfFish.Where(fish => fish.GetDeathType() != DeathType.Undefined).ToList())
+            // {
+            //     fish.GetCell().Clear();
+            //     aquarium.Remove(fish);
+            // }
+
+            listOfFish.Where(fish => fish.GetDeathType() != DeathType.Undefined).ToList().ForEach(fish =>
             {
                 fish.GetCell().Clear();
-                AquariumContainer.GetInstance().Remove(fish);
-            }
+                aquarium.Remove(fish);
+            });
 
-            foreach (var food in listOfFood.Where(food => food.GetDeathType() != DeathType.Undefined).ToList())
+            // foreach (var food in listOfFood.Where(food => food.GetDeathType() != DeathType.Undefined).ToList())
+            // {
+            //     food.GetCell().Clear();
+            //     aquarium.Remove(food);
+            // }
+
+            listOfFood.Where(food => food.GetDeathType() != DeathType.Undefined).ToList().ForEach(food =>
             {
                 food.GetCell().Clear();
-                AquariumContainer.GetInstance().Remove(food);
-            }
+                aquarium.Remove(food);
+            });
         }
 
         private void UpdateObjectsImages()
         {
             var aquarium = AquariumContainer.GetInstance();
-            _images?.Clear();
-            if (_images == null)
-                _images = new List<Image>(_numOfHerbs + _numOfStones + _numOfHerbFish + _numOfPredFish);
+            _objImages?.Clear();
+            if (_objImages == null)
+                _objImages = new List<Image>(_numOfHerbs + _numOfStones + _numOfHerbFish + _numOfPredFish);
 
-            foreach (var herb in aquarium.Herbs)
-            {
-                _images.Add(UpdateHerbImage(herb));
-            }
+            aquarium.Herbs.ForEach(herb => _objImages.Add(UpdateHerbImage(herb)));
+            // foreach (var herb in aquarium.Herbs)
+            // {
+            //     _objImages.Add(UpdateHerbImage(herb));
+            // }
 
-            foreach (var fish in aquarium.HerbivorousFish)
-            {
-                _images.Add(UpdateFishImage(fish, "herbivorous"));
-            }
+            aquarium.HerbivorousFish.ForEach(fish => _objImages.Add(UpdateFishImage(fish, "herbivorous")));
+            // foreach (var fish in aquarium.HerbivorousFish)
+            // {
+            //     _objImages.Add(UpdateFishImage(fish, "herbivorous"));
+            // }
 
-            foreach (var fish in aquarium.PredatorFish)
-            {
-                _images.Add(UpdateFishImage(fish, "predator"));
-            }
+            aquarium.PredatorFish.ForEach(fish => _objImages.Add(UpdateFishImage(fish, "predator")));
+            // foreach (var fish in aquarium.PredatorFish)
+            // {
+            //     _objImages.Add(UpdateFishImage(fish, "predator"));
+            // }
 
-            foreach (var stone in aquarium.Stones)
-            {
-                _images.Add(UpdateStoneImage(stone));
-            }
+            aquarium.Stones.ForEach(stone => _objImages.Add(UpdateStoneImage(stone)));
+            // foreach (var stone in aquarium.Stones)
+            // {
+            //     _objImages.Add(UpdateStoneImage(stone));
+            // }
         }
 
         private static Image UpdateStoneImage(Stone stone)
@@ -215,8 +249,7 @@ namespace Aquarium
                 uri += @"/adult/";
             else if (fish.AgeCurrent >= fish.AgeEndMature)
                 uri += @"/old/";
-            uri += fish.IsMale ? "boy.png" : fish.IsPregnancy ? "girl_pregnant.png" : "girl.png";
-
+            uri += fish.IsMale ? "boy.png" : fish.IsPregnant ? "girl_pregnant.png" : "girl.png";
             var image = new Image {Source = new BitmapImage(new Uri(uri, UriKind.Relative))};
             Grid.SetColumn(image, fish.GetCell().X);
             Grid.SetRow(image, fish.GetCell().Y);
@@ -225,8 +258,8 @@ namespace Aquarium
 
         private static Image UpdateHerbImage(Herb herb)
         {
-            var imageSource = new BitmapImage(new Uri(@"../../src/res/icons/herb/herb.png", UriKind.Relative));
-            var image = new Image {Source = imageSource};
+            var image = new Image
+                {Source = new BitmapImage(new Uri(@"../../src/res/icons/herb/herb.png", UriKind.Relative))};
             Grid.SetColumn(image, herb.GetCell().X);
             Grid.SetRow(image, herb.GetCell().Y);
             return image;
@@ -234,11 +267,12 @@ namespace Aquarium
 
         private void UpdateObjectsPlaces()
         {
-            _aquariumGrid.Children.Clear();
-            foreach (var image in _images)
-            {
-                _aquariumGrid.Children.Add(image);
-            }
+            AquariumGrid.Children.Clear();
+            _objImages.ForEach(image => AquariumGrid.Children.Add(image));
+            // foreach (var image in _objImages)
+            // {
+            //     AquariumGrid.Children.Add(image);
+            // }
         }
 
 
@@ -298,11 +332,11 @@ namespace Aquarium
                 return;
             }
 
-            GridAquarium.Children.Clear();
-            GridAquarium.RowDefinitions.Clear();
-            GridAquarium.ColumnDefinitions.Clear();
+            AquariumGrid.Children.Clear();
+            AquariumGrid.RowDefinitions.Clear();
+            AquariumGrid.ColumnDefinitions.Clear();
 
-            GenerateNewGrid(GridAquarium, _height, _width);
+            GenerateNewGrid(AquariumGrid, _height, _width);
         }
 
         private static void GenerateObjects()
@@ -328,7 +362,10 @@ namespace Aquarium
             for (var i = 0; i < _numOfHerbs; i++)
             {
                 aquarium.Add(new Herb(GetRandomCell(cells))
-                    {GrowthMax = _growthMax, GrowthIncreaseOnIteration = _growthIncreaseOnItr});
+                {
+                    GrowthMax = _growthMax, GrowthIncreaseOnIteration = _growthIncreaseOnItr,
+                    GrowthCurrent = new Random().Next((int) (_growthMax * 0.2), (int) (_growthMax * 0.5))
+                });
             }
 
             for (var i = 0; i < _numOfStones; i++)
@@ -352,7 +389,9 @@ namespace Aquarium
 
         private static void GenerateFish<T>(T fish) where T : FishAbstract
         {
+            if (fish.GetCell() == null) fish.Cell = GetRandomCell(AquariumContainer.GetInstance().Cells);
             fish.IsMale = Random.Next(0, 2) == 1;
+            fish.EnergyCurrent = new Random().Next((int) _energyHungryLevel, (int) _energyMax);
             fish.AgeBeginMature = _ageBeginMature;
             fish.AgeEndMature = _ageEndMature;
             fish.AgeMax = _ageMax;
