@@ -7,6 +7,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using Aquarium.enums;
 using Aquarium.Fish;
+using Aquarium.interfaces;
 
 namespace Aquarium
 {
@@ -20,25 +21,20 @@ namespace Aquarium
         private List<Image> _objImages;
         private static readonly Random Random = new Random();
 
-        // <!-- INPUT NUMBERS OF -->
         private static int _numOfHerbFish;
         private static int _numOfPredFish;
         private static int _numOfHerbs;
         private static int _numOfStones;
 
-        //<!-- INPUT PROPERTIES -->
-        //<!-- age -->
         private static int _ageBeginMature;
         private static int _ageEndMature;
         private static int _ageMax;
 
-        //<!-- energy -->
         private static double _energyMax;
         private static double _energyHungryLevel;
         private static double _energyDecreaseOnItr;
         private static int _pregnancyLength;
 
-        //<!-- growth -->
         private static double _growthMax;
         private static double _growthIncreaseOnItr;
 
@@ -55,6 +51,7 @@ namespace Aquarium
                 _timer = new DispatcherTimer {Interval = TimeSpan.FromSeconds(2)};
                 _timer.Tick += StartIteration;
             }
+
             _timer.Start();
         }
 
@@ -66,7 +63,8 @@ namespace Aquarium
             UpdateObjectsLife(AquariumContainer.GetInstance().HerbivorousFish, AquariumContainer.GetInstance().Herbs);
 
             PredatorFishNextIteration();
-            UpdateObjectsLife(AquariumContainer.GetInstance().PredatorFish, AquariumContainer.GetInstance().HerbivorousFish);
+            UpdateObjectsLife(AquariumContainer.GetInstance().PredatorFish,
+                AquariumContainer.GetInstance().HerbivorousFish);
 
             UpdateObjectsImages();
             UpdateObjectsPlaces();
@@ -74,27 +72,20 @@ namespace Aquarium
             CurrentIterationTextBlock.Text = (++_currentItr).ToString();
         }
 
-        private void OnPause(object sender, RoutedEventArgs e)
-        {
-            _timer.Stop();
-        }
+        private void OnPause(object sender, RoutedEventArgs e) => _timer.Stop();
 
-        private static void HerbNextIteration()
-        {
-            AquariumContainer.GetInstance().Herbs.ForEach(fish => fish.Grow());
-        }
+        private static void HerbNextIteration() => AquariumContainer.GetInstance().Herbs.ForEach(fish => fish.Grow());
 
-        private static void HerbivorousFishNextIteration()
-        {
-            FishNextIteration(AquariumContainer.GetInstance().HerbivorousFish,
-                AquariumContainer.GetInstance().Herbs);
-        }
 
-        private static void PredatorFishNextIteration()
-        {
-            FishNextIteration(AquariumContainer.GetInstance().PredatorFish,
-                AquariumContainer.GetInstance().HerbivorousFish);
-        }
+        private static void HerbivorousFishNextIteration() => FishNextIteration(
+            AquariumContainer.GetInstance().HerbivorousFish,
+            AquariumContainer.GetInstance().Herbs);
+
+
+        private static void PredatorFishNextIteration() => FishNextIteration(
+            AquariumContainer.GetInstance().PredatorFish,
+            AquariumContainer.GetInstance().HerbivorousFish);
+
 
         private static void FishNextIteration<T, TE>(List<T> fishes, List<TE> food)
             where T : FishAbstract, new()
@@ -145,6 +136,7 @@ namespace Aquarium
                 if (children == null) children = new List<T>();
                 children.Add(CreateChild<T>());
             }
+
             children?.ForEach(AquariumContainer.GetInstance().Add);
         }
 
@@ -293,7 +285,6 @@ namespace Aquarium
             AquariumGrid.Children.Clear();
             AquariumGrid.RowDefinitions.Clear();
             AquariumGrid.ColumnDefinitions.Clear();
-
             GenerateNewGrid(AquariumGrid, _height, _width);
         }
 
@@ -302,7 +293,6 @@ namespace Aquarium
             var aquarium = AquariumContainer.GetInstance(_height, _width);
             var cells = aquarium.Cells;
             aquarium.Clear();
-
             for (var i = 0; i < _numOfHerbFish; i++)
             {
                 var fishH = new HerbivorousFish(GetRandomCell(cells));

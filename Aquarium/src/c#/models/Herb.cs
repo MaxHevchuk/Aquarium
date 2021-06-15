@@ -1,5 +1,6 @@
 ﻿using Aquarium.enums;
 using Aquarium.Fish;
+using Aquarium.interfaces;
 
 namespace Aquarium
 {

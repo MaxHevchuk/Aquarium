@@ -1,6 +1,5 @@
 ﻿using Aquarium.enums;
-
-namespace Aquarium
+namespace Aquarium.interfaces
 {
     public interface ICell
     {

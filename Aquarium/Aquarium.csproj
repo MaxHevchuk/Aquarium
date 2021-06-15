@@ -144,5 +144,8 @@
   <ItemGroup>
     <Resource Include="src\res\icons\fish\predator\old\girl_pregnant.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="src\res\icons\icon_main.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

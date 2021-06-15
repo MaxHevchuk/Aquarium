@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         WindowState="Maximized"
+        Icon="src/res/icons/icon_main.png"
         Title="Aquarium" Height="550" Width="800">
     <Grid>
         <Grid.ColumnDefinitions>
